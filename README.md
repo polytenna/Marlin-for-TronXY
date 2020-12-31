@@ -1,5 +1,34 @@
 # Marlin 3D Printer Firmware
 
+This uses the bugfix-2.0.x branch and config files from config/examples/Tronxy/X5SA
+Customised for the TRONXY X5SA Pro Titan With TMC drivers
+
+How to print stuff quick overview:
+1. Export the model from whatever CAD program you are using as a .stl file.
+2. Load this model into a slicer. You can use whatever slicer you want, I recommend Cura or PrusaSlicer. When configuring it, the dimensions are 330×330×400mm.
+3. Take the resulting .gcode file and send it to the printer. You can do this by navigating to the Raspberry Pi in your web browser and uploading the file, then starting the print. You can get the IP address from the router's list of connected devices, but it was at 192.168.88.152 last. If that's not working, you can load the file onto the microSD card and print from the printer's touchscreen.
+
+### Modifying firmware
+
+Download Visual Studio Code, install the PlatformIO extension. Open the base folder of this git repository, and there should be a button at the bottom of the screen to build the software. Update firmware by copying Marlin-For-Tronxy/.pio/build/chitu_f103/update.cbd to a microsd card and booting the printer with it inserted.
+
+### Notes
+
+The printer is all hooked up and is mostly working but will probably require some adjustments to speed, steps per mm, z offset, etc before you can print stuff. Also I think the z endstop isn't working right so it crashes into the bed when you try and home it.
+
+The bed material seems to work ok with PLA with some gluestick on it, but sticks too well to ABS. For ABS or PETG I'd recommend the green PET tape. The z axis tends to get out of alignment fairly easily when it's powered off, to fix it rotate both motors to point the red marks forwards. The heated bed isn't super great, it seems like it can't quite make it to 110 degrees.
+
+I don't think autoleveling is configured properly, that's probably worth setting up.
+
+There's a raspberry pi connected to the printer runnning Repitier Server. It will automatically connect to the wifi but if it fails because the password changes or something it will host it's own wifi network called repitier-ap which you can connect to, then go to 10.10.10.1 in a web browser, go to global settings, then network/time, and connect to the proper network. Once it's connected, the IP address should appear on the printer screen, but if it doesn't, get it's IP address by looking at the list of connected devices on the router. At the moment, it's at 192.168.88.152 but that might change.
+
+### Syringe Robot Notes:
+
+You can mount a syringe on the hotend for filling templates. To connect it up, connect the stepper motor in place of the extruder stepper at the junction box at the back of the printer. To use the heating element, connect it in place of the extruder heater at the same junction block. The heater isn't really tested and I don't know if it's gonna work but it seems like it might. Since there's no temprature sensor attached to the heater, you can't use a proper closed loop control. If you're driving it with the printer, modify the firmware to disable closed loop control of the temprature by un-commenting PID_OPENLOOP in Configuration.h. It might also work better to drive it with a bench power supply instead, at least for testing.
+
+
+# Original Marlin Firmware Readme
+
 ![GitHub](https://img.shields.io/github/license/marlinfirmware/marlin.svg)
 ![GitHub contributors](https://img.shields.io/github/contributors/marlinfirmware/marlin.svg)
 ![GitHub Release Date](https://img.shields.io/github/release-date/marlinfirmware/marlin.svg)
